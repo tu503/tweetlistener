@@ -3,9 +3,6 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
-from minio import Minio
-from minio.error import ResponseError
-
 @contextlib.contextmanager
 def nostdout():
     save_stdout = sys.stdout
@@ -16,11 +13,6 @@ def nostdout():
 auth = OAuthHandler(os.environ['consumer_key'], os.environ['consumer_secret'])
 auth.set_access_token(os.environ['access_token'], os.environ['access_token_secret'])
 
-minioClient = Minio(os.environ['minio_hostname'],
-                  access_key=os.environ['minio_access_key'],
-                  secret_key=os.environ['minio_secret_key'],
-                  secure=False)
-
 class TweetListener(StreamListener):
     def on_data(self, data):
         try:
@@ -29,6 +21,7 @@ class TweetListener(StreamListener):
             if not tweet['retweeted']:
                 if (tweet['extended_entities'] and tweet['extended_entities']['media']):
                     print('Got %i media items' % len(tweet['extended_entities']['media']))
+                    continue
                     for media in tweet['extended_entities']['media']:
                         if (media['type'] == 'photo'):
                             print("Ooooo a photo")
@@ -41,9 +34,6 @@ class TweetListener(StreamListener):
 
                             with open(file_path_in, 'wb') as f:
                                 f.write(image_data)
-
-                            with nostdout():
-                                minioClient.fput_object('colorization', filename_in, file_path_in)
 
                             headers = {'X-Callback-Url': 'http://gateway:8080/async-function/tweetpic'}
                             json_data = {
@@ -75,4 +65,4 @@ if __name__ == '__main__':
 
     print('Listening for tweets')
     #This line filter Twitter Streams to capture data by the keywords: 'python', 'javascript', 'ruby'
-    stream.filter(track=['@colorisebot'])
+    stream.filter(track=['@realDonaldTrump'])
