@@ -15,4 +15,6 @@ minio_hostname=localhost # minio not in play here
 # then,
 docker run --env-file ~/env-file developius/tweetlistener:latest
 
+docker pull python:2.7-alpine
+
 ```
