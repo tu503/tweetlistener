@@ -1,6 +1,6 @@
 # tweetlistener
 ```bash
-git clone tweetlistner
+git clone git@github.com:tu503/tweetlistener.git
 cd tweetlistener
 ./build.sh
 
