@@ -4,16 +4,17 @@ git clone git@github.com:tu503/tweetlistener.git
 cd tweetlistener
 ./build.sh
 
-# make ~/env-file
-cat ~/env-file
+# make ~/env-file-x
+cat << EOF > ~/env-file
 consumer_key=...
 consumer_secret=...
 access_token=...
 access_token_secret=...
 minio_hostname=localhost # minio not in play here
+EOF
 
 # then,
-docker run --env-file ~/env-file developius/tweetlistener:latest
+docker run --env-file ~/env-file-x developius/tweetlistener:latest
 
 docker pull python:2.7-alpine
 
